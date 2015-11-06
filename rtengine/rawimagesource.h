@@ -284,7 +284,7 @@ protected:
     void dcb_demosaic(int iterations, bool dcb_enhance);
     void ahd_demosaic(int winx, int winy, int winw, int winh);
 #ifdef HALIDE_ENABLED
-    void khc_yhc_demosaic(int winx, int winy, int winw, int winh);
+    void igd_halide_demosaic(int winx, int winy, int winw, int winh);
 #endif
     void border_interpolate(unsigned int border, float (*image)[4], unsigned int start = 0, unsigned int end = 0);
     void border_interpolate2(int winw, int winh, int lborders);

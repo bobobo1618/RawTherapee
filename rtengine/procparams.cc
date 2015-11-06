@@ -45,7 +45,7 @@ const int bl = (int) options.rtSettings.bot_left;
 const char *RAWParams::BayerSensor::methodstring[RAWParams::BayerSensor::numMethods] = {
         "amaze", "igv", "lmmse", "eahd", "hphd", "vng4", "dcb", "ahd", "fast", "mono",
 #ifdef HALIDE_ENABLED
-        "khc_yhc",
+        "igd",
 #endif
         "none" };
 const char *RAWParams::XTransSensor::methodstring[RAWParams::XTransSensor::numMethods] = {"3-pass (best)", "1-pass (medium)", "fast", "mono", "none" };

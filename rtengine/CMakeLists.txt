@@ -1,7 +1,3 @@
-IF (HALIDE_PATH)
-    add_definitions( -DHALIDE_ENABLED=1 )
-ENDIF (HALIDE_PATH)
-
 include_directories (${EXTRA_INCDIR} ${GTHREAD_INCLUDE_DIRS} ${GOBJECT_INCLUDE_DIRS} ${GLIB2_INCLUDE_DIRS}
     ${GLIBMM_INCLUDE_DIRS} ${IPTCDATA_INCLUDE_DIRS} ${LCMS_INCLUDE_DIRS} ${EXPAT_INCLUDE_DIRS} ${FFTW3F_INCLUDE_DIRS}
     ${GTKMM_INCLUDE_DIRS} ${GTK_INCLUDE_DIRS})
@@ -29,19 +25,27 @@ set (RTENGINESOURCEFILES safegtk.cc colortemp.cc curves.cc flatcurves.cc diagona
     clutstore.cc
     ciecam02.cc)
 
-IF (HALIDE_PATH)
-    # Add the Halide code.
-    set(RTENGINESOURCEFILES ${RTENGINESOURCEFILES} KHC_YHC_demosaic.cpp )
-    add_library(halide_debayer STATIC halide_debayer.o)
-    SET_SOURCE_FILES_PROPERTIES(halide_debayer.o PROPERTIES EXTERNAL_OBJECT true GENERATED true)
-    SET_TARGET_PROPERTIES(halide_debayer PROPERTIES LINKER_LANGUAGE C)
-    set(HALIDE_LIBRARIES halide_debayer)
-ENDIF (HALIDE_PATH)
-
 include_directories (BEFORE "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_library (rtengine ${RTENGINESOURCEFILES})
 add_dependencies (rtengine AboutFile)
+
+IF (HALIDE_PATH)
+    add_definitions( -DHALIDE_ENABLED=1 )
+    # Add the Halide code.
+    set(RTENGINESOURCEFILES ${RTENGINESOURCEFILES} igd_halide_demosaic.cpp)
+    add_executable("igd_demosaic.generator" "${CMAKE_CURRENT_SOURCE_DIR}/halide/GenGen.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/halide/igd_demosaic_generator.cpp")
+    target_compile_options("igd_demosaic.generator" PRIVATE "-std=c++11" "-fno-rtti")
+    target_link_libraries("igd_demosaic.generator" "Halide" z)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/halide/HalideGenerator.cmake")
+
+    halide_add_generator_dependency(TARGET rtengine
+            GENERATOR_TARGET "igd_demosaic.generator"
+            GENERATOR_NAME "igd_demosaic"
+            GENERATED_FUNCTION "igd_demosaic"
+            GENERATOR_ARGS "target=host")
+ENDIF (HALIDE_PATH)
 
 #It may be nice to store library version too
 IF (BUILD_SHARED_LIBS)

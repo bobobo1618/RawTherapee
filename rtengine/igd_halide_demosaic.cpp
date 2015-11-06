@@ -1,6 +1,6 @@
 //
-// A Halide implementation of "A Low Complexity Color Demosaicing Algorithm Based on Integrated Gradient" by
-// King-Hong Chung and Yuk-Hee Chan:
+// A wrapper around the Halide implementation of "A Low Complexity Color Demosaicing Algorithm Based on Integrated
+// Gradient" by King-Hong Chung and Yuk-Hee Chan:
 //
 // http://www.eie.polyu.edu.hk/~enyhchan/J-JEI-Low_complexity_color_demosaicing_algorithm_based_on_IG.pdf
 //
@@ -10,12 +10,12 @@
 #include "../rtgui/multilangmgr.h"
 #include "procparams.h"
 #include "opthelper.h"
-#include "halide_debayer.h"
+#include "igd_demosaic.h"
 
 using namespace std;
 using namespace rtengine;
 
-void RawImageSource::khc_yhc_demosaic(int winx, int winy, int winw, int winh){
+void RawImageSource::igd_halide_demosaic(int winx, int winy, int winw, int winh){
     double progress = 0;
 
     const bool plistenerActive = (const bool) plistener;
@@ -68,7 +68,7 @@ void RawImageSource::khc_yhc_demosaic(int winx, int winy, int winw, int winh){
         layout = 3;
     }
 
-    halide_debayer(&input_buf, layout, &output_buf);
+    igd_demosaic(&input_buf, layout, &output_buf);
 
     uint64_t plane_size = output_buf.extent[0] * output_buf.extent[1];
     float *output_start = (float *) output_buf.host;

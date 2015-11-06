@@ -1140,7 +1140,7 @@ public:
         //numMethods }; // This MUST be the last enum
         enum eMethod { amaze, igv, lmmse, eahd, hphd, vng4, dcb, ahd, fast, mono,
 #ifdef HALIDE_ENABLED
-                       khc_yhc,
+                       igd,
 #endif
                        none, numMethods
                      }; // This MUST be the last enum
