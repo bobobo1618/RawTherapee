@@ -23,7 +23,7 @@ void RawImageSource::igd_halide_demosaic(int winx, int winy, int winw, int winh)
     if (plistener) {
         plistener->setProgressStr(
                 Glib::ustring::compose(M("TP_RAW_DMETHOD_PROGRESSBAR"),
-                                       RAWParams::BayerSensor::methodstring[RAWParams::BayerSensor::khc_yhc]));
+                                       RAWParams::BayerSensor::methodstring[RAWParams::BayerSensor::igd]));
 
         plistener->setProgress(progress);
     }

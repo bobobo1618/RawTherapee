@@ -25,15 +25,18 @@ set (RTENGINESOURCEFILES safegtk.cc colortemp.cc curves.cc flatcurves.cc diagona
     clutstore.cc
     ciecam02.cc)
 
+IF (HALIDE_PATH)
+    add_definitions( -DHALIDE_ENABLED=1 )
+    # Add the Halide code.
+    set(RTENGINESOURCEFILES ${RTENGINESOURCEFILES} igd_halide_demosaic.cpp)
+ENDIF (HALIDE_PATH)
+
 include_directories (BEFORE "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_library (rtengine ${RTENGINESOURCEFILES})
 add_dependencies (rtengine AboutFile)
 
 IF (HALIDE_PATH)
-    add_definitions( -DHALIDE_ENABLED=1 )
-    # Add the Halide code.
-    set(RTENGINESOURCEFILES ${RTENGINESOURCEFILES} igd_halide_demosaic.cpp)
     add_executable("igd_demosaic.generator" "${CMAKE_CURRENT_SOURCE_DIR}/halide/GenGen.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/halide/igd_demosaic_generator.cpp")
     target_compile_options("igd_demosaic.generator" PRIVATE "-std=c++11" "-fno-rtti")
